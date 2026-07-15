@@ -2,7 +2,12 @@ workflows:
   ios-build:
     name: CalorieNaija iOS Build
     max_build_duration: 30
+    integrations:
+      app_store_connect: CalorieNaija
     environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.calorienaija.ios
       xcode: latest
       cocoapods: default
     scripts:
@@ -17,15 +22,18 @@ workflows:
           mv icon-1024.png CalorieNaija/Assets.xcassets/AppIcon.appiconset/
           mv Contents.json CalorieNaija/Assets.xcassets/AppIcon.appiconset/
           echo '{"info":{"version":1,"author":"xcode"}}' > CalorieNaija/Assets.xcassets/Contents.json
-      - name: Build archive
+      - name: Set up code signing
         script: |
-          xcodebuild archive \
-            -project CalorieNaija.xcodeproj \
-            -scheme CalorieNaija \
-            -archivePath build/CalorieNaija.xcarchive \
-            -destination "generic/platform=iOS" \
-            CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
+          xcode-project use-profiles
+      - name: Build IPA
+        script: |
+          xcode-project build-ipa \
+            --project CalorieNaija.xcodeproj \
+            --scheme CalorieNaija
     artifacts:
-      - build/*.xcarchive
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
