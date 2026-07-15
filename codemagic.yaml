@@ -8,7 +8,6 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.calorienaija.ios
-        certificate_type: IOS_DISTRIBUTION
       xcode: latest
     scripts:
       - name: Restructure project files
@@ -37,3 +36,4 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
+
