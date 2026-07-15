@@ -8,19 +8,19 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.calorienaija.ios
+        certificate_type: IOS_DISTRIBUTION
       xcode: latest
-      cocoapods: default
     scripts:
       - name: Restructure project files
         script: |
           mkdir -p CalorieNaija.xcodeproj
           mkdir -p CalorieNaija/Assets.xcassets/AppIcon.appiconset
-          mv project.pbxproj CalorieNaija.xcodeproj/
-          mv CalorieNaijaApp.swift CalorieNaija/
-          mv ContentView.swift CalorieNaija/
-          mv Info.plist CalorieNaija/
-          mv icon-1024.png CalorieNaija/Assets.xcassets/AppIcon.appiconset/
-          mv Contents.json CalorieNaija/Assets.xcassets/AppIcon.appiconset/
+          mv project.pbxproj CalorieNaija.xcodeproj/ || true
+          mv CalorieNaijaApp.swift CalorieNaija/ || true
+          mv ContentView.swift CalorieNaija/ || true
+          mv Info.plist CalorieNaija/ || true
+          mv icon-1024.png CalorieNaija/Assets.xcassets/AppIcon.appiconset/ || true
+          mv Contents.json CalorieNaija/Assets.xcassets/AppIcon.appiconset/ || true
           echo '{"info":{"version":1,"author":"xcode"}}' > CalorieNaija/Assets.xcassets/Contents.json
       - name: Set up code signing
         script: |
