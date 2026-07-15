@@ -17,17 +17,15 @@ workflows:
           mv icon-1024.png CalorieNaija/Assets.xcassets/AppIcon.appiconset/
           mv Contents.json CalorieNaija/Assets.xcassets/AppIcon.appiconset/
           echo '{"info":{"version":1,"author":"xcode"}}' > CalorieNaija/Assets.xcassets/Contents.json
-      - name: Set up code signing
+      - name: Build archive
         script: |
-          xcode-project use-profiles
-      - name: Build IPA
-        script: |
-          xcode-project build-ipa \
-            --project CalorieNaija.xcodeproj \
-            --scheme CalorieNaija \
-            --archive-flags="-destination 'generic/platform=iOS'"
+          xcodebuild archive \
+            -project CalorieNaija.xcodeproj \
+            -scheme CalorieNaija \
+            -archivePath build/CalorieNaija.xcarchive \
+            -destination "generic/platform=iOS" \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
     artifacts:
-      - build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        auth: integration
+      - build/*.xcarchive
