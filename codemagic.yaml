@@ -21,6 +21,28 @@ workflows:
           mv icon-1024.png CalorieNaija/Assets.xcassets/AppIcon.appiconset/ || true
           mv Contents.json CalorieNaija/Assets.xcassets/AppIcon.appiconset/ || true
           echo '{"info":{"version":1,"author":"xcode"}}' > CalorieNaija/Assets.xcassets/Contents.json
+      - name: Fix bundle identifier (safety net)
+        script: |
+          sed -i '' 's/com\.calorienaija\.www/com.calorienaija.ios/g' CalorieNaija.xcodeproj/project.pbxproj
+      - name: Remove alpha channel from app icon (safety net)
+        script: |
+          ICON=CalorieNaija/Assets.xcassets/AppIcon.appiconset/icon-1024.png
+          sips -s format jpeg "$ICON" --out /tmp/icon-flat.jpg
+          sips -s format png /tmp/icon-flat.jpg --out "$ICON"
+      - name: Create shared Xcode scheme
+        script: |
+          ruby -e '
+            require "xcodeproj"
+            project = Xcodeproj::Project.open("CalorieNaija.xcodeproj")
+            target = project.targets.first
+            scheme = Xcodeproj::XCScheme.new
+            scheme.add_build_target(target)
+            scheme.set_launch_target(target)
+            scheme.save_as("CalorieNaija.xcodeproj", "CalorieNaija", true)
+          '
+      - name: Set build number
+        script: |
+          agvtool new-version -all $PROJECT_BUILD_NUMBER
       - name: Set up code signing
         script: |
           xcode-project use-profiles
@@ -36,4 +58,5 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
+
 
