@@ -18,7 +18,6 @@
 		A2000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2000005 /* CalorieNaija.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalorieNaija.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000006 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
-		A2000007 /* CalorieNaija.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CalorieNaija.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 /* Begin PBXFrameworksBuildPhase section */
 		A5000003 /* Frameworks */ = {
@@ -46,7 +45,6 @@
 				A2000006 /* StoreManager.swift */,
 				A2000003 /* Assets.xcassets */,
 				A2000004 /* Info.plist */,
-				A2000007 /* CalorieNaija.entitlements */,
 			);
 			path = CalorieNaija;
 			sourceTree = "<group>";
@@ -131,7 +129,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = CalorieNaija/CalorieNaija.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = CalorieNaija/Info.plist;
@@ -152,7 +149,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = CalorieNaija/CalorieNaija.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = CalorieNaija/Info.plist;
