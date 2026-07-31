@@ -17,6 +17,7 @@ workflows:
           mv project.pbxproj CalorieNaija.xcodeproj/ || true
           mv CalorieNaijaApp.swift CalorieNaija/ || true
           mv ContentView.swift CalorieNaija/ || true
+          mv StoreManager.swift CalorieNaija/ || true
           mv Info.plist CalorieNaija/ || true
           mv icon-1024.png CalorieNaija/Assets.xcassets/AppIcon.appiconset/ || true
           mv Contents.json CalorieNaija/Assets.xcassets/AppIcon.appiconset/ || true
@@ -29,12 +30,42 @@ workflows:
           ICON=CalorieNaija/Assets.xcassets/AppIcon.appiconset/icon-1024.png
           sips -s format jpeg "$ICON" --out /tmp/icon-flat.jpg
           sips -s format png /tmp/icon-flat.jpg --out "$ICON"
+      - name: Add StoreKit capability to project
+        script: |
+          # Add In-App Purchase capability via entitlements
+          cat > CalorieNaija/CalorieNaija.entitlements << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>com.apple.developer.in-app-payments</key>
+              <array>
+                  <string>merchant.com.calorienaija.ios</string>
+              </array>
+          </dict>
+          </plist>
+          EOF
       - name: Create shared Xcode scheme
         script: |
           ruby -e '
             require "xcodeproj"
             project = Xcodeproj::Project.open("CalorieNaija.xcodeproj")
             target = project.targets.first
+
+            # Add StoreManager.swift to the target
+            store_manager = project.new_file("CalorieNaija/StoreManager.swift")
+            target.source_build_phase.add_file_reference(store_manager)
+
+            # Add entitlements file
+            entitlements = project.new_file("CalorieNaija/CalorieNaija.entitlements")
+
+            # Set entitlements in build settings
+            target.build_configurations.each do |config|
+              config.build_settings["CODE_SIGN_ENTITLEMENTS"] = "CalorieNaija/CalorieNaija.entitlements"
+            end
+
+            project.save
+
             scheme = Xcodeproj::XCScheme.new
             scheme.add_build_target(target)
             scheme.set_launch_target(target)
@@ -58,5 +89,3 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-
-
