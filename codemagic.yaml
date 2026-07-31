@@ -52,11 +52,7 @@ workflows:
             project = Xcodeproj::Project.open("CalorieNaija.xcodeproj")
             target = project.targets.first
 
-            # Add StoreManager.swift to the target
-            store_manager = project.new_file("CalorieNaija/StoreManager.swift")
-            target.source_build_phase.add_file_reference(store_manager)
-
-            # Add entitlements file
+            # Add entitlements file reference only (StoreManager already in pbxproj)
             entitlements = project.new_file("CalorieNaija/CalorieNaija.entitlements")
 
             # Set entitlements in build settings
